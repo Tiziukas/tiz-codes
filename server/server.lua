@@ -1,3 +1,4 @@
+local codes = require("codes")
 AddEventHandler('onResourceStart', function(resourceName)
     if (GetCurrentResourceName() ~= resourceName) then
       return
@@ -19,7 +20,7 @@ AddEventHandler("tizcodes:givecode", function(playerID, input)
     local _source = source  
     local xPlayer = ESX.GetPlayerFromId(_source)
     local inputas = table.concat(input, ' ')
-    local yra = table_contains(Config.Codes,inputas)
+    local yra = table_contains(codes,inputas)
     if yra then
         MySQL.Async.execute('INSERT INTO codes (id, code, date) VALUES (@id, @code, @date)', 
         {

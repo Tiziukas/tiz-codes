@@ -17,9 +17,7 @@ Config.Price3 = 1
 Config.PaymentType3 = "water"
 
 Config.Command = "codes"
-Config.Codes = {
-    'IWantLindensAss',
-}
+
 Config.Language = {
     contexttitle = 'Codes',
     usecode ='Use a code',
