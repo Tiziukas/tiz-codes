@@ -34,17 +34,6 @@ function DoApplication()
         {type = 'input', label = Config.Language.code, description = Config.Language.namedesc, required = true, min = 4, max = 16}
     })
     if not input then return end
-    hasaLicense = lib.callback('tizcodes:checkcode', false)
-    if not hasaLicense then
-        local playerID = source
-        TriggerServerEvent("tizcodes:givecode", playerID, input)
-    else
-        lib.notify({
-            title = Config.Language.notifytitle,
-            description = Config.Language.alreadyused,
-            icon = 'ban',
-            iconColor = '#C53030',
-            position = 'top'
-        })
-    end
+    local playerID = source
+    TriggerServerEvent("tizcodes:givecode", playerID, input)
 end

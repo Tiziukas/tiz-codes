@@ -20,59 +20,77 @@ AddEventHandler("tizcodes:givecode", function(playerID, input)
     local _source = source  
     local xPlayer = ESX.GetPlayerFromId(_source)
     local inputas = table.concat(input, ' ')
-    local yra = table_contains(codes,inputas)
-    if yra then
-        MySQL.Async.execute('INSERT INTO codes (id, code, date) VALUES (@id, @code, @date)', 
-        {
-            ['id']   = xPlayer.identifier,
-            ['code']   = inputas,
-            ['date'] = os.date('%Y-%m-%d'),
-        }, function ()
-        end)
-        if Config.Reward1 == true then
-            exports.ox_inventory:AddItem(_source, Config.PaymentType, Config.Price)
-        elseif Config.Reward2 == true then
-            exports.ox_inventory:AddItem(_source, Config.PaymentType, Config.Price)
-            exports.ox_inventory:AddItem(_source, Config.PaymentType1, Config.Price1)
-        elseif Config.Reward3 == true then
-            exports.ox_inventory:AddItem(_source, Config.PaymentType, Config.Price)
-            exports.ox_inventory:AddItem(_source, Config.PaymentType1, Config.Price1)
-            exports.ox_inventory:AddItem(_source, Config.PaymentType2, Config.Price2)
-        elseif Config.Reward4 == true then
-            exports.ox_inventory:AddItem(_source, Config.PaymentType, Config.Price)
-            exports.ox_inventory:AddItem(_source, Config.PaymentType1, Config.Price1)
-            exports.ox_inventory:AddItem(_source, Config.PaymentType2, Config.Price2)
-            exports.ox_inventory:AddItem(_source, Config.PaymentType3, Config.Price3)
-        end
+    local hasaLicense = lib.callback('tizcodes:checkcode', false)
+    if hasaLicense then
         TriggerClientEvent('ox_lib:notify', source, {
             title = Config.Language.notifytitle,
-            description = Config.Language.receivedmoney,
+            description = Config.Language.alreadyused,
             position = 'top',
             style = {
                 backgroundColor = '#141517',
                 color = '#C1C2C5',
                 ['.description'] = {
-                  color = '#909296'
-                }
-            },
-            icon = 'check',
-            iconColor = '#30c56e'
-        })
-    else
-        TriggerClientEvent('ox_lib:notify', source, {
-            title = Config.Language.notifytitle,
-            description = Config.Language.badcode,
-            position = 'top',
-            style = {
-                backgroundColor = '#141517',
-                color = '#C1C2C5',
-                ['.description'] = {
-                  color = '#909296'
+                color = '#909296'
                 }
             },
             icon = 'ban',
             iconColor = '#C53030'
         })
+    else
+        local yra = table_contains(codes,inputas)
+        if yra then
+            MySQL.Async.execute('INSERT INTO codes (id, code, date) VALUES (@id, @code, @date)', 
+            {
+                ['id']   = xPlayer.identifier,
+                ['code']   = inputas,
+                ['date'] = os.date('%Y-%m-%d'),
+            }, function ()
+            end)
+            if Config.Reward1 == true then
+                exports.ox_inventory:AddItem(_source, Config.PaymentType, Config.Price)
+            elseif Config.Reward2 == true then
+                exports.ox_inventory:AddItem(_source, Config.PaymentType, Config.Price)
+                exports.ox_inventory:AddItem(_source, Config.PaymentType1, Config.Price1)
+            elseif Config.Reward3 == true then
+                exports.ox_inventory:AddItem(_source, Config.PaymentType, Config.Price)
+                exports.ox_inventory:AddItem(_source, Config.PaymentType1, Config.Price1)
+                exports.ox_inventory:AddItem(_source, Config.PaymentType2, Config.Price2)
+            elseif Config.Reward4 == true then
+                exports.ox_inventory:AddItem(_source, Config.PaymentType, Config.Price)
+                exports.ox_inventory:AddItem(_source, Config.PaymentType1, Config.Price1)
+                exports.ox_inventory:AddItem(_source, Config.PaymentType2, Config.Price2)
+                exports.ox_inventory:AddItem(_source, Config.PaymentType3, Config.Price3)
+            end
+            TriggerClientEvent('ox_lib:notify', source, {
+                title = Config.Language.notifytitle,
+                description = Config.Language.receivedmoney,
+                position = 'top',
+                style = {
+                    backgroundColor = '#141517',
+                    color = '#C1C2C5',
+                    ['.description'] = {
+                    color = '#909296'
+                    }
+                },
+                icon = 'check',
+                iconColor = '#30c56e'
+            })
+        else
+            TriggerClientEvent('ox_lib:notify', source, {
+                title = Config.Language.notifytitle,
+                description = Config.Language.badcode,
+                position = 'top',
+                style = {
+                    backgroundColor = '#141517',
+                    color = '#C1C2C5',
+                    ['.description'] = {
+                    color = '#909296'
+                    }
+                },
+                icon = 'ban',
+                iconColor = '#C53030'
+            })
+        end
     end
 end)
 
